@@ -6,7 +6,7 @@
 /*   By: ybayart <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 21:35:29 by ybayart           #+#    #+#             */
-/*   Updated: 2019/11/09 23:40:47 by ybayart          ###   ########.fr       */
+/*   Updated: 2019/11/10 18:04:09 by ybayart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ typedef struct	s_gnl
 	int		i;
 	long	readen;
 	char	*file;
-	char	*buf;
 }				t_gnl;
 
 int				get_next_line(int fd, char **line);
