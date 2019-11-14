@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybayart <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/08 19:21:46 by ybayart           #+#    #+#             */
-/*   Updated: 2019/11/13 20:12:42 by ybayart          ###   ########.fr       */
+/*   Created: 2019/11/14 04:11:01 by ybayart           #+#    #+#             */
+/*   Updated: 2019/11/14 04:11:40 by ybayart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
-int		main(int argc, char **argv)
+# include <unistd.h>
+# include <stdlib.h>
+
+typedef struct	s_gnl
 {
-	char	*line;
-	int		file;
+	int		loop;
+	int		i;
+	long	readen;
+	char	*file;
+}				t_gnl;
 
-	file = open(argv[1], O_RDWR);
-	while (get_next_line(file, &line))
-	{
-		printf("%s\n",line);
-		free(line);
-	}
-	while(1);
-}
+int				get_next_line(int fd, char **line);
+char			*ft_strjoin(char *s1, char *s2);
+size_t			ft_strlen(char *s);
+
+#endif
