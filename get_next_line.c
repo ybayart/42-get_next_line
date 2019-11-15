@@ -6,7 +6,7 @@
 /*   By: ybayart <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 21:30:18 by ybayart           #+#    #+#             */
-/*   Updated: 2019/11/14 07:07:18 by ybayart          ###   ########.fr       */
+/*   Updated: 2019/11/15 22:24:59 by ybayart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char	*ft_reading(int fd, char *file, long *readen)
 			break ;
 	}
 	free(buf);
+	buf = NULL;
 	if (*readen == -1)
 		return (NULL);
 	return (file);
@@ -77,11 +78,10 @@ int		get_next_line(int fd, char **line)
 	if (!line)
 		return (-1);
 	if (mem == NULL)
-	{
 		if ((mem = (char*)malloc(2)) == NULL)
 			return (-1);
-		mem[0] = 0;
-	}
+		else
+			mem[0] = 0;
 	data.file = mem;
 	if (get_newline(data.file) == -1)
 	{

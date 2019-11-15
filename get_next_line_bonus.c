@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybayart <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/14 04:10:50 by ybayart           #+#    #+#             */
-/*   Updated: 2019/11/14 04:12:14 by ybayart          ###   ########.fr       */
+/*   Created: 2019/11/15 22:25:28 by ybayart           #+#    #+#             */
+/*   Updated: 2019/11/15 22:27:08 by ybayart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char	*ft_reading(int fd, char *file, long *readen)
 			break ;
 	}
 	free(buf);
+	buf = NULL;
 	if (*readen == -1)
 		return (NULL);
 	return (file);
@@ -63,6 +64,7 @@ int		ft_setmem(t_gnl data, char **file, char **mem)
 	if (data.readen != BUFFER_SIZE && *mem[0] == '\0')
 	{
 		free(*mem);
+		*mem = NULL;
 		return (0);
 	}
 	return (1);
@@ -76,18 +78,21 @@ int		get_next_line(int fd, char **line)
 	if (!line)
 		return (-1);
 	if (mem == NULL)
-	{
 		if ((mem = (char*)malloc(2)) == NULL)
 			return (-1);
-		mem[0] = 0;
-	}
+		else
+			mem[0] = 0;
 	data.file = mem;
 	if (get_newline(data.file) == -1)
+	{
 		if ((data.file = ft_reading(fd, data.file, &data.readen)) == NULL)
 		{
 			free(data.file);
 			return (-1);
 		}
+	}
+	else
+		data.readen = BUFFER_SIZE;
 	if ((data.loop = ft_setmem(data, &data.file, &mem)) == -1)
 		return (-1);
 	*line = data.file;
