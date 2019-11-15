@@ -6,7 +6,7 @@
 /*   By: ybayart <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 21:30:18 by ybayart           #+#    #+#             */
-/*   Updated: 2019/11/15 22:24:59 by ybayart          ###   ########.fr       */
+/*   Updated: 2019/11/15 22:29:58 by ybayart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ int		get_next_line(int fd, char **line)
 	if (mem == NULL)
 		if ((mem = (char*)malloc(2)) == NULL)
 			return (-1);
-		else
-			mem[0] = 0;
+	if (mem == NULL)
+		mem[0] = 0;
 	data.file = mem;
 	if (get_newline(data.file) == -1)
 	{
