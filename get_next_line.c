@@ -6,7 +6,7 @@
 /*   By: ybayart <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 21:30:18 by ybayart           #+#    #+#             */
-/*   Updated: 2019/11/14 04:08:03 by ybayart          ###   ########.fr       */
+/*   Updated: 2019/11/14 07:07:18 by ybayart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int		ft_setmem(t_gnl data, char **file, char **mem)
 	if (data.readen != BUFFER_SIZE && *mem[0] == '\0')
 	{
 		free(*mem);
+		*mem = NULL;
 		return (0);
 	}
 	return (1);
@@ -83,11 +84,15 @@ int		get_next_line(int fd, char **line)
 	}
 	data.file = mem;
 	if (get_newline(data.file) == -1)
+	{
 		if ((data.file = ft_reading(fd, data.file, &data.readen)) == NULL)
 		{
 			free(data.file);
 			return (-1);
 		}
+	}
+	else
+		data.readen = BUFFER_SIZE;
 	if ((data.loop = ft_setmem(data, &data.file, &mem)) == -1)
 		return (-1);
 	*line = data.file;
