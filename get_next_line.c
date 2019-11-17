@@ -6,7 +6,7 @@
 /*   By: ybayart <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 21:30:18 by ybayart           #+#    #+#             */
-/*   Updated: 2019/11/15 22:29:58 by ybayart          ###   ########.fr       */
+/*   Updated: 2019/11/16 00:15:25 by ybayart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ char	*ft_reading(int fd, char *file, long *readen)
 		buf[*readen] = '\0';
 		tmp = file;
 		file = ft_strjoin(file, buf);
-		free(tmp);
+		if (*tmp != '\0')
+			free(tmp);
 		if (get_newline(buf) != -1)
 			break ;
 	}
@@ -54,6 +55,8 @@ int		ft_setmem(t_gnl data, char **file, char **mem)
 	data.loop = 0;
 	while (*(*file + data.loop) != '\n' && *(*file + data.loop) != '\0')
 		data.loop++;
+	if (*(*file + data.loop) == '\0')
+		return (0);
 	if (!(*mem = (char*)malloc(ft_strlen(*file) - data.loop)))
 		return (-1);
 	*(*file + data.loop) = '\0';
@@ -61,27 +64,16 @@ int		ft_setmem(t_gnl data, char **file, char **mem)
 	while (*(*file + data.loop + ++data.i) != '\0')
 		*(*mem + data.i - 1) = *(*file + data.loop + data.i);
 	*(*mem + data.i - 1) = '\0';
-	if (data.readen != BUFFER_SIZE && *mem[0] == '\0')
-	{
-		free(*mem);
-		*mem = NULL;
-		return (0);
-	}
 	return (1);
 }
 
 int		get_next_line(int fd, char **line)
 {
-	static char	*mem;
+	static char	*mem = "\0";
 	t_gnl		data;
 
 	if (!line)
 		return (-1);
-	if (mem == NULL)
-		if ((mem = (char*)malloc(2)) == NULL)
-			return (-1);
-	if (mem == NULL)
-		mem[0] = 0;
 	data.file = mem;
 	if (get_newline(data.file) == -1)
 	{

@@ -6,7 +6,7 @@
 /*   By: ybayart <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 21:35:29 by ybayart           #+#    #+#             */
-/*   Updated: 2019/11/10 18:04:09 by ybayart          ###   ########.fr       */
+/*   Updated: 2019/11/16 00:14:17 by ybayart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include <stdio.h>
 
 typedef struct	s_gnl
 {
