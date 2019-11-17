@@ -5,88 +5,123 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybayart <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/06 21:30:18 by ybayart           #+#    #+#             */
-/*   Updated: 2019/11/16 00:15:25 by ybayart          ###   ########.fr       */
+/*   Created: 2019/11/17 18:32:06 by ybayart           #+#    #+#             */
+/*   Updated: 2019/11/17 18:32:08 by ybayart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		get_newline(char *s)
+char	*ft_substrfr(char *s, unsigned int start, size_t len)
 {
+	char	*temp;
 	int		i;
 
 	i = 0;
-	while (*(s + i))
+	if (s == NULL)
+		return (NULL);
+	if ((temp = (char*)malloc((len + 1) * sizeof(char))) == NULL)
+		return (NULL);
+	temp[len] = '\0';
+	while (len--)
 	{
-		if (*(s + i) == '\n' || *(s + i) == '\0')
-			return (i);
+		temp[i] = s[start];
 		i++;
+		start++;
 	}
-	return (-1);
+	free(s);
+	return (temp);
 }
 
-char	*ft_reading(int fd, char *file, long *readen)
+int		check_line(char **str, char **line)
 {
-	char	*tmp;
-	char	*buf;
+	int i;
 
-	if ((buf = (char*)malloc(BUFFER_SIZE + 1)) == NULL)
-		return (NULL);
-	while ((*readen = read(fd, buf, BUFFER_SIZE)) > 0)
+	i = -1;
+	while ((*str)[++i] && i < (int)ft_strlen(*str))
 	{
-		buf[*readen] = '\0';
-		tmp = file;
-		file = ft_strjoin(file, buf);
-		if (*tmp != '\0')
-			free(tmp);
-		if (get_newline(buf) != -1)
-			break ;
+		if ((*str)[i] == '\n')
+		{
+			if (i == 0)
+			{
+				if (((*line) = ft_strdup("")) == NULL)
+					return (-1);
+				*str = ft_substrfr(*str, i + 1, ft_strlen(*str));
+			}
+			else
+			{
+				if (((*line) = ft_substr(*str, 0, i)) == NULL)
+					return (-1);
+				*str = ft_substrfr(*str, i + 1, ft_strlen(*str));
+			}
+			return (1);
+		}
 	}
-	free(buf);
-	buf = NULL;
-	if (*readen == -1)
-		return (NULL);
-	return (file);
+	return (0);
 }
 
-int		ft_setmem(t_gnl data, char **file, char **mem)
+int		free_all(char **str, char *buff, int crit)
 {
-	data.loop = 0;
-	while (*(*file + data.loop) != '\n' && *(*file + data.loop) != '\0')
-		data.loop++;
-	if (*(*file + data.loop) == '\0')
-		return (0);
-	if (!(*mem = (char*)malloc(ft_strlen(*file) - data.loop)))
+	if (*str && (crit == -1 || crit == 0))
+	{
+		free(*str);
+		*str = NULL;
+	}
+	if (buff != NULL)
+		free(buff);
+	if (crit == -1)
 		return (-1);
-	*(*file + data.loop) = '\0';
-	data.i = 0;
-	while (*(*file + data.loop + ++data.i) != '\0')
-		*(*mem + data.i - 1) = *(*file + data.loop + data.i);
-	*(*mem + data.i - 1) = '\0';
-	return (1);
+	else if (crit)
+		return (1);
+	return (0);
+}
+
+int		setup(char **buff, char **str, char **line, int fd)
+{
+	int ret;
+
+	if (!(*buff = (char*)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+		return (-1);
+	if (fd < 0 || line == NULL || BUFFER_SIZE <= 0)
+		return (-1);
+	if (!*str)
+		if (!(*str = (char*)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+			return (-1);
+	if (*str)
+	{
+		ret = check_line(str, line);
+		if (ret == -1)
+			return (-1);
+		else if (ret)
+			return (1);
+	}
+	return (0);
 }
 
 int		get_next_line(int fd, char **line)
 {
-	static char	*mem = "\0";
-	t_gnl		data;
+	char		*buff;
+	int			ret;
+	static char	*str;
 
-	if (!line)
-		return (-1);
-	data.file = mem;
-	if (get_newline(data.file) == -1)
+	if ((ret = setup(&buff, &str, line, fd)) == -1)
+		return (free_all(&str, buff, -1));
+	if (ret)
+		return (free_all(&str, buff, 1));
+	while ((ret = read(fd, buff, BUFFER_SIZE)) > 0)
 	{
-		if ((data.file = ft_reading(fd, data.file, &data.readen)) == NULL)
-		{
-			free(data.file);
-			return (-1);
-		}
+		buff[ret] = '\0';
+		str = ft_strjoin(str, buff);
+		free(buff);
+		buff = NULL;
+		if ((ret = check_line(&str, line)) == -1)
+			return (free_all(&str, buff, -1));
+		if (ret)
+			return (free_all(&str, buff, 1));
+		if (!(buff = (char*)malloc(sizeof(char) * (BUFFER_SIZE + 1))))
+			return (free_all(&str, buff, -1));
 	}
-	else
-		data.readen = BUFFER_SIZE;
-	if ((data.loop = ft_setmem(data, &data.file, &mem)) == -1)
-		return (-1);
-	*line = data.file;
-	return (data.loop);
+	if (ret == -1 || ((*line) = ft_substr(str, 0, ft_strlen(str))) == NULL)
+		return (free_all(&str, buff, -1));
+	return (free_all(&str, buff, 0));
 }
