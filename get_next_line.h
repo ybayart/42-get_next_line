@@ -6,7 +6,7 @@
 /*   By: ybayart <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 21:39:57 by ybayart           #+#    #+#             */
-/*   Updated: 2019/11/17 21:40:28 by ybayart          ###   ########.fr       */
+/*   Updated: 2019/11/18 19:12:28 by ybayart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,6 @@ typedef struct	s_gnl
 }				t_gnl;
 
 int				get_next_line(int fd, char **line);
-void			init_free_gnl(int fd, t_gnl *gnl, char **line);
-int				is_readed(const char *s, int len);
-char			*join(char *s1, char *s2, int *len1, int len2);
 char			*ft_substr(char const *s, int start, int len);
-int				lecture(int fd, t_gnl *gnl, char **line);
 
 #endif

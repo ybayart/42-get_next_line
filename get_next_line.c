@@ -6,7 +6,7 @@
 /*   By: ybayart <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 21:39:35 by ybayart           #+#    #+#             */
-/*   Updated: 2019/11/17 21:39:37 by ybayart          ###   ########.fr       */
+/*   Updated: 2019/11/18 19:12:11 by ybayart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int			gnl_lecture(int fd, t_gnl *gnl, char **line)
 	return (1);
 }
 
-char		*gnl_join(char *s1, char *s2, int *s_s1, int s_s2)
+static char	*join(char *s1, char *s2, int *s_s1, int s_s2)
 {
 	int		i;
 	int		j;
@@ -86,11 +86,11 @@ int			get_next_line(int fd, char **line)
 	while (1)
 	{
 		if ((gnl.tmp = gnl_is_readed(gnl.str + gnl.i, gnl.len - gnl.i)) < 0)
-			*line = gnl_join(*line, gnl.str + gnl.i, &gnl.l_line, gnl.len - gnl.i);
+			*line = join(*line, gnl.str + gnl.i, &gnl.l_line, gnl.len - gnl.i);
 		else
 		{
 			tmp = ft_substr(gnl.str + gnl.i, 0, gnl.tmp);
-			*line = gnl_join(*line, tmp, &gnl.l_line, gnl.tmp);
+			*line = join(*line, tmp, &gnl.l_line, gnl.tmp);
 			free(tmp);
 		}
 		gnl.i = ((gnl.tmp < 0) ? 0 : gnl.i + gnl.tmp + 1);
