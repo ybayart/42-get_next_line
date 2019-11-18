@@ -5,24 +5,32 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybayart <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/17 18:32:17 by ybayart           #+#    #+#             */
-/*   Updated: 2019/11/17 18:32:21 by ybayart          ###   ########.fr       */
+/*   Created: 2019/11/17 21:39:57 by ybayart           #+#    #+#             */
+/*   Updated: 2019/11/17 21:40:28 by ybayart          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# include <unistd.h>
 # include <stdlib.h>
-# include <stddef.h>
+# include <unistd.h>
 
-char	*ft_substr(const char *s, unsigned int start, size_t len);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_strdup(const char *src);
-void	*ft_memcpy(void *dest, const void *src, size_t n);
-char	*ft_strncat(char *dest, const char *src, size_t len);
-size_t	ft_strlen(const char *src);
-int		get_next_line(int fd, char **line);
+typedef struct	s_gnl
+{
+	char			str[((BUFFER_SIZE > 0) ? BUFFER_SIZE + 1 : 1)];
+	int				fd;
+	int				i;
+	int				len;
+	int				l_line;
+	int				tmp;
+}				t_gnl;
+
+int				get_next_line(int fd, char **line);
+void			init_free_gnl(int fd, t_gnl *gnl, char **line);
+int				is_readed(const char *s, int len);
+char			*join(char *s1, char *s2, int *len1, int len2);
+char			*ft_substr(char const *s, int start, int len);
+int				lecture(int fd, t_gnl *gnl, char **line);
 
 #endif
